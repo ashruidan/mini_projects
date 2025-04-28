@@ -15,15 +15,28 @@ fn main() {
 
     // Execute Action
     let mut content: String;
+    let mut modified: bool = false;
     match action.as_str() {
-        "create" => {
+        "add"|"create" => {
             content = "- [ ] ".to_owned();
             content.push_str(&action_args);
-            list.push(&content)},
+            list.push(&content);
+            modified = true;
+        },
+        "display" | "read" => {
+            for (nb, task) in list.iter().enumerate() {
+                println!("{} ({})", task, nb + 1);
+            }
+        },
+        "check" | "update" => (),
+        "remove" | "delete" => (),
+        "find" | "search" => (),
         _ => (),
     }
 
     // Save File
-    fs::write(file_path, list.join("\n"))
-        .expect("Expect list to be written");
+    if modified {
+        fs::write(file_path, list.join("\n"))
+            .expect("Expect list to be written");
+    }
 }
