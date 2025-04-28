@@ -25,10 +25,20 @@ fn main() {
         },
         "display" | "read" => {
             for (nb, task) in list.iter().enumerate() {
-                println!("{} ({})", task, nb + 1);
+                println!("{} ({})", task, nb);
             }
         },
-        "check" | "update" => (),
+        "check" | "update" => {
+            let index: usize = action_args.parse().unwrap();
+            content = list[index].to_string();
+            if content.chars().nth(3) == Some(' ') {
+                content.replace_range(3..4,"x");
+            } else {
+                content.replace_range(3..4," ");
+            }
+            list[index] = content.as_str();
+            modified = true;
+        },
         "remove" | "delete" => (),
         "find" | "search" => (),
         _ => (),
