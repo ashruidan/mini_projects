@@ -15,18 +15,18 @@ fn main() {
 
     // Execute Action
     let mut content: String;
-    let mut modified: bool = false;
+    let mut modified: bool = true;
     match action.as_str() {
         "add"|"create" => {
             content = "- [ ] ".to_owned();
             content.push_str(&action_args);
             list.push(&content);
-            modified = true;
         },
         "display" | "read" => {
             for (nb, task) in list.iter().enumerate() {
                 println!("{} ({})", task, nb);
             }
+            modified = false;
         },
         "check" | "update" => {
             let index: usize = action_args.parse().unwrap();
@@ -37,9 +37,11 @@ fn main() {
                 content.replace_range(3..4," ");
             }
             list[index] = content.as_str();
-            modified = true;
         },
-        "remove" | "delete" => (),
+        "remove" | "delete" => {
+            let index: usize = action_args.parse().unwrap();
+            list.remove(index);
+        },
         "find" | "search" => (),
         _ => (),
     }
